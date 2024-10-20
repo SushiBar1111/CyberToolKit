@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+    //function buat show register page
+    function showRegisterPage(Request $request){
+        return view('register');
+    }
     // function buat register
     function userRegister(Request $request){
         // validasi input dulu
@@ -24,15 +29,17 @@ class AuthController extends Controller
         if($validation->fails()){ //kalo input ga sesuai return HTTP 400
             return response()->json($validation->errors(), 400);
         }else{ //klo sesuai baru masukin ke db
-            $username = $request->username;
-            $email = $request->email;
-            $password = Hash::make($request->password);
+            $username = strip_tags($request->input('username')); // ini ngilangin tag2 HTML
+            $email = filter_var($request->input('email'), FILTER_SANITIZE_EMAIL); // ini ngecek input di email apakah sesuai dengan email pada umumnya
+            $password = Hash::make($request->password); // ya hash password
 
             User::create([
                 'username' => $username,
                 'email' => $email,
-                'password' => $password
-            ])
+                'password' => $password,
+                'role' => 'user',
+            ]);
+            return redirect()->route('login')->with('status', 'Registration successful. Please login.');
         }
     }
 
@@ -45,25 +52,25 @@ class AuthController extends Controller
 
         //cek validasinya gacor ga kang
         if($validation->fails()){
-            return response()->json($validation->errors(), 400);
+            return redirect()->route('login')->with('status', 'aduh kang email sama password harus diisi');
         }else{ //kalo gacor kang yaudah tinggal diliat ini email sama passwordnya ada trs bener ga brok akhh kasus mennn
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $credentials = [
+                'email' => filter_var($request->input('email'), FILTER_SANITIZE_EMAIL), // ni di sanitasi dulu neh si email harus beneran email
+                'password' => $request->input('password')
+            ];
+            if (Auth::attempt($credentials)) {
                 // regenenarsi session id brok
                 $request->session()->regenerate();
                 
                 $user = Auth::user();
                 
-                if($user->role == 'admin'){
-                    return response()->json([
-                        'message' => 'Login successful admin',
-                    ], 200);
+                if($user->role == 'admin'){ // ni dia ngecek yg punyal credentials ini rolenya apa brok
+                    return redirect()->route('admin.dashboard') //di-redirect ke dashboard khusus atmin
                 }else{
-                    return response()->json([
-                        'message' => 'Login successful',
-                    ], 200);
+                    return redirect()->route('dashboard')
                 }
             }else{ // ini kalo autentikasi gagal
-                return response()->json(['error' => 'Email or password is incorrect'], 401);
+                return redirect()->back()->withErrors(['login' => 'The provided credentials do not match our records.']);
             }
         }
     }
@@ -73,6 +80,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Logout successful'], 200);
+        return redirect()->route('login');
     }
 }

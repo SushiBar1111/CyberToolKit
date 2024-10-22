@@ -19,23 +19,18 @@ class ToolController extends Controller
         //validasi data yang di send dr frontend dulu
         $validation = Validator::make($request->all(),
         [
-            'tool_id' => 'required|integer'; //harus integer, biar ga bisa di-inject(kecuali ada injection yg full integer yaudah mokad)
+            'tool_name' => 'required|string'; 
         ]);
 
         if($validation->fails()){ // kalo datanya ga valid
-            return response()->json($validation->errors(), 400);
+            return redirect()->route('Tools')->with('status', 'invalid data')->setStatusCode(400);
         }else if(!$validation->fails() && Auth::check()){
-            $tool = Tool::find($request->input('tool_id'));// nyari tool
+            $tool = Tool::find($request->input('tool_name'));// nyari tool
             if(!$tool){ // kalo ga ada ngab
-                return response()->json(['error' => 'Sorry, tool not found'], 404);
+                return redirect()->route('Tools')->with('status', 'ga ada tool nya, maaf yah')->setStatusCode(404);
             }else{
-                return response()->json($tool, 200);
+                return redirect()->route('Tools')->with('status', 'ada nih yey')->setStatusCode(200);
             }
         }
-    }
-    
-    // ya kek namanya buat delete tool, tapi cuman bisa si admin doang
-    function DeleteTool(Request $request){
-        
     }
 }

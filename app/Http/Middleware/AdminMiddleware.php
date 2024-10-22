@@ -14,7 +14,7 @@ class AdminMiddleware
         }
 
         // Jika bukan admin, redirect atau kirim error
-        return response()->json(['error' => 'Unauthorized access'], 403);
+        return response()->redirect('login')->with('status', 'IHHH GA BOLEH CUYYYY LU BUKAN ATMIN');
     }
 }
 

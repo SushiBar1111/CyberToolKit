@@ -25,7 +25,7 @@ class BookmarkController extends Controller
         ]);
 
         if($validation->fails()){
-            return redirect()->route('tool')->with('stauts', 'must be integer ID');
+            return redirect()->route('tool')->with('stauts', 'must be integer ID')->setStatusCode(400);
         }else{
             $user = Auth::user();
 
@@ -33,13 +33,13 @@ class BookmarkController extends Controller
             $existingBookmark = Bookmark::where('user_id', $user->id)->where('tool_id', $request->tool_id)->first();
 
             if($existingBookmark){
-                return redirect()->route('tool')->with('status', 'Tool already bookmarked');
+                return redirect()->route('tool')->with('status', 'Tool already bookmarked')->setStatusCode(400);
             }else{
                 Bookmark::create([
                     'user_id' => $user->id,
                     'tool_id' => $request->tool_id,
                 ]);
-                return redirect()->route('tool')->with('status', 'Tool bookmarked successfully!');
+                return redirect()->route('tool')->with('status', 'Tool bookmarked successfully!')->setStatusCode(200);
             }
         }
     }
@@ -47,11 +47,21 @@ class BookmarkController extends Controller
     function deleteBookmark(Request $request){
         $validation = Validator::make($request->all(),
         [
-            'tool_id' => 'required|integer';
+            'bookmark_id' => 'required|integer',
         ]);
 
         if($validation->fails()){
-            return redirect()->route('tool')
-        }else
+            return redirect()->route('bookmark')->setStatusCode(400);
+        }else{
+            $bookmark = Bookmark::find($requset->bookmark_id);
+
+            if(!$bookmark){
+                return redirect()->route('bookmark')->with('error', 'nga ketemu ngab')->setStatusCode(400);
+            }else{
+                $bookmark->delete;
+            }
+
+            return redirect()->route('bookmark')->with('status', 'success masbro')->setStatusCode(200);
+        }
     }
 }

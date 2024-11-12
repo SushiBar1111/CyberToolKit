@@ -9,8 +9,12 @@ use App\Models\Tool;
 
 class ToolController extends Controller
 {
+    //buat ngambil dashboard view
+    function DashboardView(){
+        return view('dashboard');
+    }
     //fungsi buat ngambil tool view bedeuhhh
-    function ToolView(Request $request){
+    function ToolView(){
         return view('Tool');
     }
     
@@ -19,18 +23,17 @@ class ToolController extends Controller
         //validasi data yang di send dr frontend dulu
         $validation = Validator::make($request->all(),
         [
-            'tool_name' => 'required|string'; 
+            'tool_name' => 'required|string',
         ]);
 
         if($validation->fails()){ // kalo datanya ga valid
-            return redirect()->route('Tools')->with('status', 'invalid data')->setStatusCode(400);
-        }else if(!$validation->fails() && Auth::check()){
-            $tool = Tool::find($request->input('tool_name'));// nyari tool
-            if(!$tool){ // kalo ga ada ngab
-                return redirect()->route('Tools')->with('status', 'ga ada tool nya, maaf yah')->setStatusCode(404);
-            }else{
-                return redirect()->route('Tools')->with('status', 'ada nih yey')->setStatusCode(200);
-            }
+            return redirect()->route('dashboardView')->with('status', 'invalid data')->setStatusCode(400);
+        }
+        $tools = Tool::where('name', 'like', '%' . $request->tool_name . '%')->get();// nyari tool
+        if(!$tools){ // kalo ga ada ngab
+            return redirect()->route('dashboardView')->with('status','ga ada tool nya, maaf yah');
+        }else{
+            return view('dashboard', ['tools'=>$tools])->with('stasus', 'ada nih yey!');
         }
     }
 }

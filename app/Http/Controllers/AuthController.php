@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-
     //function buat show register page dan login page
-    function showRegisterPage(Request $request){
-        return view('registerpage');
+    function showRegisterPage(){
+        return view('register');
     }
-    function showLoginPage(Request $request){
-        return view('loginpage');
+    function showLoginPage(){
+        return view('login');
     }
 
     // function buat register
@@ -25,24 +24,37 @@ class AuthController extends Controller
         $validation = Validator::make($request->all(),
         [ //array of validation
             'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
 
         ]);
 
         if($validation->fails()){ //kalo input ga sesuai return HTTP 400
             return redirect()->route('register')->with('status', 'Ga bener nih datanya')->setStatusCode(400);
         }else{ //klo sesuai baru masukin ke db
-            $username = strip_tags($request->input('username')); // ini ngilangin tag2 HTML
+            $username = strip_tags($request->input('username')); // ini ngilangin tag2 HTML jadi pas di save di database dia ga ada script HTML
             $email = filter_var($request->input('email'), FILTER_SANITIZE_EMAIL); // ini ngecek input di email apakah sesuai dengan email pada umumnya
             $password = Hash::make($request->password); // ya hash password
 
-            User::create([
-                'username' => $username,
-                'email' => $email,
-                'password' => $password,
-                'role' => 'user',
-            ]);
+            //cek dulu emailnya udh ada ato ngga
+            $existingEmail = User::where('email', $email)->first();
+            if($existingEmail){
+                return redirect()->route('register')->with('status', 'emailnya udah ada brok, lupa ya')->setStatusCode(400);
+            }
+            //cek username yg udah ada
+            $existingUsername = User::where('username', $username)->first();
+            if($existingUsername){
+                return redirect()->route('register')->with('status', 'username udah ada brok, lupa ya, jangan brute force password tapi yak PLS')->setStatusCode(400);
+            }
+
+            // more secure way
+             $user = new User();
+             $user->username = $username;
+             $user->password = $password;
+             $user->email = $email;
+             $user->role = 'user';
+             $user->save();
+
             return redirect()->route('login')->with('status', 'Registration successful. Please login.')->setStatusCode(200);
         }
     }
@@ -51,7 +63,7 @@ class AuthController extends Controller
         // validasi input dulu
         $validation = Validator::make($request->all(),[
             'email' => 'required|email',
-            'password' => 'required|min 8',
+            'password' => 'required|min:8',
         ]);
 
         //cek validasinya gacor ga kang
@@ -69,9 +81,9 @@ class AuthController extends Controller
                 $user = Auth::user();
                 
                 if($user->role == 'admin'){ // ni dia ngecek yg punyal credentials ini rolenya apa brok
-                    return redirect()->route('admin.dashboard')->setStatusCode(200) //di-redirect ke dashboard khusus atmin
+                    return redirect()->route('dashboardAdmin')->setStatusCode(200); //di-redirect ke dashboard khusus atmin
                 }else{
-                    return redirect()->route('dashboard')
+                    return redirect()->route('dashboardView')->setStatusCode(200);
                 }
             }else{ // ini kalo autentikasi gagal
                 return redirect()->back()->withErrors(['login' => 'The provided credentials do not match our records.'])->setStatusCode(401);

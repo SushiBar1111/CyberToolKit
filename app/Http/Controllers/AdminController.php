@@ -21,6 +21,12 @@ class AdminController extends Controller
         return view('adminListUser', ['users' => $user]);
     }
 
+     // buat ngambil tampilan tool yang ingin dirubah
+    function editToolView(Request $request){
+        $tool = Tool::findOrFail($request->tool_id); // Mengambil tool berdasarkan tool_id
+        return view('editTool', ['tool' => $tool]); // Mengirim tool ke view
+    }
+
     function addTool(Request $request){
         $validation = Validator::make($request->all(), 
         [
@@ -89,5 +95,31 @@ class AdminController extends Controller
         }else{
             return redirect()->route('listUsers')->with('status', 'user ga ada');
         }
+    }
+
+    // buat modify isi tool
+    function modifyTool(Request $request){
+        $validation = Validator::make($request->all(),
+        [
+            'tool_id' => 'required'|'id',
+            'tool_name' => 'required|string',
+            'description' => 'string',
+            'category' => 'string'
+        ]);
+
+        if($validation->fails()){
+            return redirect()->route('dashboardAdmin')->with('status', 'failed modify');
+        }
+        $stripedName = strip_tags($request->tool_name);
+        $stripedDescription = strip_tags($request->description);
+        $stripedCategory = strip_tags($request->category);
+
+        $modifiedTool = Tool::find($request->tool_id);
+        $modifiedTool->name = $stripedName;
+        $modifiedTool->description = $stripedDescription;
+        $modifiedTool->category = $stripedCategory;
+        $modifiedTool->save();
+
+        return redirect()->route('dashboardAdmin')->with('status', 'tool berhasil diubah');
     }
 }

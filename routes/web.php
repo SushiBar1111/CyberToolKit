@@ -22,8 +22,9 @@ Route::post('/tool/list', [ToolController::class, 'GetTool'])->name('searchTool'
 
 // rute yang user harus login dulu
 Route::middleware(['auth'])->group(function(){
-    Route::get('/bookmark', [BookmarkController::class, 'BookmarkPage'])->name('bookmark'); //buat liat bookmark si user
-    Route::post('/bookmark', [BookmarkController::class, 'addBookmark'])->name('addingBookmark'); //buat nambahin bookmark
+    Route::get('/bookmark', [BookmarkController::class, 'BookmarkPage'])->name('bookmarkPage'); //buat liat bookmark si user
+    Route::post('/bookmark/add', [BookmarkController::class, 'addBookmark'])->name('addingBookmark'); //buat nambahin bookmark
+    Route::post('/bookmark/delete', [BookmarkController::class, 'deleteBookmark'])->name('deletingBookmark'); //buat delete bookmark
     Route::get('/profile', [ProfileController::class, 'GetProfile'])->name('profile');
 });
 
@@ -34,5 +35,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/addTool', [AdminController::class, 'addTool'])->name('addTool');
     Route::get('/admin/listUser', [AdminController::class, 'getUserList'])->name('listUsers');
     Route::post('/admin/deleteUser', [AdminController::class, 'deleteUser'])->name('deleteUser');
+    Route::get('/edit-tool/{tool_id}', [AdminController::class, 'editToolView'])->name('editToolView');
+    Route::post('/edit-tool/{tool_id}', [AdminController::class, 'modifyTool'])->name('updateTool');
    
 });

@@ -58,6 +58,7 @@
                             <input type="hidden" name="tool_id" value="{{$tool->id}}">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
+                        <a href="{{ route('editToolView', ['tool_id' => $tool->id]) }}" class="btn btn-warning">Edit</a>
                     </div>
                 </div>
             </div>

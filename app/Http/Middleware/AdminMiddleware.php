@@ -3,18 +3,25 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    public function handle($request, Closure $next)
+    /**
+     * Get the path the user should be redirected to when they are not authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
+     */
+    public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request); // Izinkan akses
+        if (Auth::user()->role === 'admin') {
+            return $next($request); // Jika admin, lanjutkan request
         }
 
-        // Jika bukan admin, redirect atau kirim error
-        return response()->redirect('login')->with('status', 'IHHH GA BOLEH CUYYYY LU BUKAN ATMIN');
+        // Jika bukan admin, redirect ke halaman login atau beri error
+        return redirect('dashboard')->with('status','IHHH BUKAN ATMIN');
     }
 }
-

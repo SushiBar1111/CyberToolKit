@@ -7,7 +7,7 @@ use App\Http\Controllers\ToolController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 
-
+Route::get('/', [ToolController::Class, 'DashboardView']);
 Route::get('/register', [AuthController::class, 'showRegisterPage'])->name('register');
 Route::post('/register', [AuthController::class, 'userRegister']);
 

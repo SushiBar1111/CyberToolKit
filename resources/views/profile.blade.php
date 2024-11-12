@@ -8,6 +8,9 @@
 </head>
 <body>
     <div class="container mt-5">
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('bookmarkPage') }}" class="btn btn-secondary mb-3">See your bookmark</a>
+        </div>
         <h1 class="text-center">Profile Page</h1>
         <div class="card mt-4">
             <div class="card-body">

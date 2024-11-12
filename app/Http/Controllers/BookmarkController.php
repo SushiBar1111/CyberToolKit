@@ -26,46 +26,44 @@ class BookmarkController extends Controller
         ]);
 
         if($validation->fails()){
-            return redirect()->back()->with('stauts', 'error ID')->setStatusCode(400);
+            return redirect()->route('dashboardView')->with('status', 'error ID')->setStatusCode(400);
         }
         $user = Auth::user();
         // cek user dah login belom
         if(!$user){
-            return redirect()->back()->with('status', 'kalo mau bookmark harus login dan punya akun dulu ngab maaf ya');
+            return redirect()->route('dashboardView')->with('status', 'kalo mau bookmark harus login dan punya akun dulu ngab maaf ya');
         }
 
         //cek apakah tools udh di bookmark sama user ini
         $existingBookmark = Bookmark::where('user_id', $user->id)->where('tool_id', $request->tool_id)->first();
 
         if($existingBookmark){
-            return redirect()->route('tool')->with('status', 'Tool already bookmarked')->setStatusCode(400);
-        }else{
-            Bookmark::create([
-                    'user_id' => $user->id,
-                    'tool_id' => $request->tool_id,
-                ]);
-                return redirect()->route('tool')->with('status', 'Tool bookmarked successfully!')->setStatusCode(200);
-            }
+            return redirect()->route('dashboardView')->with('status', 'Tool already bookmarked')->setStatusCode(400);
+        }
+        $bookmark = new Bookmark();
+        $bookmark->tool_id = $request->tool_id;
+        $bookmark->user_id = $user->id;
+        $bookmark->save();
+        return redirect()->route('dashboardView')->with('status', 'Tool bookmarked successfully!')->setStatusCode(200);
     }
 
     function deleteBookmark(Request $request){
         $validation = Validator::make($request->all(),
         [
-            'bookmark_id' => 'required|integer',
+            'bookmark_id' => 'required|integer'
         ]);
 
         if($validation->fails()){
-            return redirect()->route('bookmark')->setStatusCode(400);
+            return redirect()->route('bookmarkPage')->with('status', 'harus integer')->setStatusCode(400);
         }else{
-            $bookmark = Bookmark::find($requset->bookmark_id);
+            $bookmark = Bookmark::find($request->bookmark_id);
 
             if(!$bookmark){
-                return redirect()->route('bookmark')->with('error', 'nga ketemu ngab')->setStatusCode(400);
-            }else{
-                $bookmark->delete;
+                return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab')->setStatusCode(400);
             }
+            $bookmark->delete();
 
-            return redirect()->route('bookmark')->with('status', 'success masbro')->setStatusCode(200);
+            return redirect()->route('bookmarkPage')->with('status', 'success dihapus masbro')->setStatusCode(200);
         }
     }
 }

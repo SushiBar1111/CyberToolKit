@@ -21,17 +21,12 @@ class AuthController extends Controller
     // function buat register
     function userRegister(Request $request){
         // validasi input dulu
-        $validation = Validator::make($request->all(),
-        [ //array of validation
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
-
         ]);
-
-        if($validation->fails()){ //kalo input ga sesuai return HTTP 400
-            return redirect()->route('register')->with('status', 'Ga bener nih datanya')->setStatusCode(400);
-        }else{ //klo sesuai baru masukin ke db
+         //klo sesuai baru masukin ke db
             $username = strip_tags($request->input('username')); // ini ngilangin tag2 HTML jadi pas di save di database dia ga ada script HTML
             $email = filter_var($request->input('email'), FILTER_SANITIZE_EMAIL); // ini ngecek input di email apakah sesuai dengan email pada umumnya
             $password = Hash::make($request->password); // ya hash password
@@ -98,4 +93,4 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
-}
+

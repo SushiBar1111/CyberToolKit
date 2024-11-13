@@ -52,6 +52,12 @@
                     <div class="form-group mb-3">
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </div>
+                    <!-- Register button -->
+                </form>
+                <form action="{{ route('register') }}" method="GET">
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </div>
                 </form>
             </div>
         </div>

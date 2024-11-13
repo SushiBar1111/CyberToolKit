@@ -57,6 +57,11 @@
                         <button type="submit" class="btn btn-primary w-100">Register</button>
                     </div>
                 </form>
+                <form action="{{ route('login') }}" method="GET">
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

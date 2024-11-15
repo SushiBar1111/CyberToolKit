@@ -48,7 +48,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ $tool->name }}</h5>
-                        <p class="card-text">{{ Str::limit($tool->description, 50) }}</p>
+                        <p class="card-text">{{ $tool->description }}</p>
                         <p class="card-text"><strong>Kategori:</strong> {{ ucfirst($tool->category) }}</p> <!-- Menampilkan kategori -->
                         
                         <!-- Form untuk menghapus tool -->

@@ -28,19 +28,8 @@ class AuthController extends Controller
         ]);
          //klo sesuai baru masukin ke db
             $username = strip_tags($request->input('username')); // ini ngilangin tag2 HTML jadi pas di save di database dia ga ada script HTML
-            $email = filter_var($request->input('email'), FILTER_SANITIZE_EMAIL); // ini ngecek input di email apakah sesuai dengan email pada umumnya
+            $email = $request->input('email');
             $password = Hash::make($request->password); // ya hash password
-
-            //cek dulu emailnya udh ada ato ngga
-            $existingEmail = User::where('email', $email)->first();
-            if($existingEmail){
-                return redirect()->route('register')->with('status', 'emailnya udah ada brok, lupa ya')->setStatusCode(400);
-            }
-            //cek username yg udah ada
-            $existingUsername = User::where('username', $username)->first();
-            if($existingUsername){
-                return redirect()->route('register')->with('status', 'username udah ada brok, lupa ya, jangan brute force password tapi yak PLS')->setStatusCode(400);
-            }
 
             // more secure way
              $user = new User();
@@ -52,7 +41,6 @@ class AuthController extends Controller
 
             return redirect()->route('login')->with('status', 'Registration successful. Please login.')->setStatusCode(200);
         }
-    }
 
     function userLogin(Request $request){
         // validasi input dulu
@@ -60,29 +48,23 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
-
-        //cek validasinya gacor ga kang
-        if($validation->fails()){
-            return redirect()->route('login')->with('status', 'aduh kang email sama password harus diisi')->setStatusCode(400);
-        }else{ //kalo gacor kang yaudah tinggal diliat ini email sama passwordnya ada trs bener ga brok akhh kasus mennn
-            $credentials = [
-                'email' => filter_var($request->input('email'), FILTER_SANITIZE_EMAIL), // ni di sanitasi dulu neh si email harus beneran email
-                'password' => $request->input('password')
-            ];
-            if (Auth::attempt($credentials)) {
-                // regenenarsi session id brok
-                $request->session()->regenerate();
+        $credentials = [
+            'email' => $request->input('email'), 
+            'password' => $request->input('password')
+        ];
+        if (Auth::attempt($credentials)) {
+            // regenenarsi session id brok
+            $request->session()->regenerate();
                 
-                $user = Auth::user();
+            $user = Auth::user();
                 
-                if($user->role == 'admin'){ // ni dia ngecek yg punyal credentials ini rolenya apa brok
-                    return redirect()->route('dashboardAdmin')->setStatusCode(200); //di-redirect ke dashboard khusus atmin
-                }else{
-                    return redirect()->route('dashboardView')->setStatusCode(200);
-                }
-            }else{ // ini kalo autentikasi gagal
-                return redirect()->back()->withErrors(['login' => 'The provided credentials do not match our records.'])->setStatusCode(401);
+            if($user->role === 'admin'){ // ni dia ngecek yg punyal credentials ini rolenya apa brok
+                return redirect()->route('dashboardAdmin')->setStatusCode(200); //di-redirect ke dashboard khusus atmin
+            }else{
+                return redirect()->route('dashboardView')->setStatusCode(200);
             }
+        }else{ // ini kalo autentikasi gagal
+            return redirect()->back()->withErrors(['login' => 'The provided credentials do not match our records.'])->setStatusCode(401);
         }
     }
 
@@ -94,3 +76,4 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
+}

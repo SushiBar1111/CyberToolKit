@@ -55,15 +55,14 @@ class BookmarkController extends Controller
 
         if($validation->fails()){
             return redirect()->route('bookmarkPage')->with('status', 'harus integer')->setStatusCode(400);
-        }else{
-            $bookmark = Bookmark::find($request->bookmark_id);
-
-            if(!$bookmark){
-                return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab')->setStatusCode(400);
-            }
-            $bookmark->delete();
-
-            return redirect()->route('bookmarkPage')->with('status', 'success dihapus masbro')->setStatusCode(200);
         }
+        $bookmark = Bookmark::find($request->bookmark_id);
+
+        if(!$bookmark){
+            return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab bookmarknya')->setStatusCode(400);
+        }
+        $bookmark->delete();
+
+        return redirect()->route('bookmarkPage')->with('status', 'success dihapus masbro')->setStatusCode(200);
     }
 }

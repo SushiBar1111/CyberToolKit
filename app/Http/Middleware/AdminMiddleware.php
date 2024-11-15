@@ -21,7 +21,7 @@ class AdminMiddleware
             return $next($request); // Jika admin, lanjutkan request
         }
 
-        // Jika bukan admin, redirect ke halaman login atau beri error
+        // Jika bukan admin, beri error
         return redirect('dashboard')->with('status','IHHH BUKAN ATMIN');
     }
 }

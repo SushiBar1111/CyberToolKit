@@ -37,27 +37,27 @@ class AdminController extends Controller
 
         if($validation->fails()){
             return redirect()->route('dashboardAdmin')->withErrors('status','Kureng neh datanya');
-        }else{
-
-            $toolName = strip_tags($request->input('tool_name'));
-            $toolDescription = strip_tags($request->input('description'));
-            $toolCategory = strip_tags($request->input('category'));
-            //cek apakah udh ada tool dengan nama yg sama
-            $existingTool = Tool::where('name', $toolName)->first();
-
-            if($existingTool){ //buat cek tool udh ada ato blm
-                return redirect()->route('dashboardAdmin')->with('status', 'udah ada ngab, lupa ya awokwokow');
-            }
-            
-            $tool = new Tool();
-            $tool->name = $toolName;
-            $tool->description = $toolDescription;
-            $toolCategory = $toolCategory;
-            $tool->save();
-
-            return redirect()->route('dashboardAdmin')->with('status', 'berhasil ditambah ngab');
         }
+        $toolName = strip_tags($request->input('tool_name'));
+        $toolDescription = strip_tags($request->input('description'));
+        $toolCategory = strip_tags($request->input('category'));
+
+        //cek apakah udh ada tool dengan nama yg sama
+        $existingTool = Tool::where('name', $toolName)->first();
+
+        if($existingTool){ //buat cek tool udh ada ato blm
+            return redirect()->route('dashboardAdmin')->with('status', 'udah ada ngab, lupa ya awokwokow');
+        }
+            
+        $tool = new Tool();
+        $tool->name = $toolName;
+        $tool->description = $toolDescription;
+        $toolCategory = $toolCategory;
+        $tool->save();
+
+        return redirect()->route('dashboardAdmin')->with('status', 'berhasil ditambah ngab');
     }
+    
     function deleteTool(Request $request){
         $validation = Validator::make($request->all(),
         [
@@ -66,18 +66,19 @@ class AdminController extends Controller
 
         if($validation->fails()){
             return redirect()->route('dashboardAdmin'); // kalo validasi fail, ke dashboard admin aja
-        }else{
-            $tool = Tool::find($request->tool_id);
-
-            if(!$tool){
-                return redirect()->route('dashboardAdmin')->with('status', 'lah kok nga ada brok toolnya');
-            }else{
-                $tool->delete();
-            }
-
-            return redirect()->route('dashboardAdmin')->with('status', 'berhasil di delete');
         }
+        $tool = Tool::find($request->tool_id);
+
+        if(!$tool){
+            return redirect()->route('dashboardAdmin')->with('status', 'lah kok nga ada brok toolnya');
+        }else{
+            $tool->delete();
+        }
+
+        return redirect()->route('dashboardAdmin')->with('status', 'berhasil di delete');
+
     }
+
     // fungsi buat delete user
     function deleteUser(Request $request){
         $validation = Validator::make($request->all(),
@@ -86,7 +87,7 @@ class AdminController extends Controller
         ]);
 
         if($validation->fails()){
-            return redirect()->route('listUsers')->with('status', 'error pas datanya');
+            return redirect()->route('listUsers')->with('status', 'harus integer');
         }
         $deletedUser = User::find($request->user_id);
         if($deletedUser){

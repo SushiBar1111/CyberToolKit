@@ -33,7 +33,7 @@ class AuthController extends Controller
 
             // ini kalo misal ada XSS menggunakan payload-nya di dalam tag HTML, kayak <img src=alert('XSS'), dari strip tags sebelumnya
             // akan menghasilkan data yang kosong, jadi nanti yang di-save di database itu kosong. Maka dari itu harus ada validasi biar nanti
-            // yang masuk ke database ga kosong. Di bawah ini validasinya
+            //yang masuk ke database ga kosong. Di bawah ini validasinya
             if(blank($username)){
                 return redirect()->route('login')->with('status', 'Invalid data');
             }

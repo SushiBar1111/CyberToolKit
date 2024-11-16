@@ -62,7 +62,7 @@ class BookmarkController extends Controller
         if(!$bookmark){ 
             return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab bookmarknya')->setStatusCode(404);
         }
-        if($bookmark->user_id !== $user->id){ // coba mencegah user menghapus bookmark user lainnya dengan mengganti di
+        if($bookmark->user_id !== $user->id){ //mencegah user menghapus bookmark user lainnya dengan mengganti di bookmark ID pake burpsuite
             return redirect()->route('bookmarkPage')->with('status', 'Ga boleh delete bookmark user lain')->setStatusCode(401);
         }
         $bookmark->delete();

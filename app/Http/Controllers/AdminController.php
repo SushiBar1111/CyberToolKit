@@ -42,13 +42,20 @@ class AdminController extends Controller
         $toolDescription = strip_tags($request->input('description'));
         $toolCategory = strip_tags($request->input('category'));
 
+        // ini kalo misal ada XSS menggunakan payload-nya di dalam tag HTML, kayak <img src=alert('XSS'), dari strip tags sebelumnya
+        // akan menghasilkan data yang kosong, jadi nanti yang di-save di database itu kosong. Maka dari itu harus ada validasi biar nanti
+        //yang masuk ke database ga kosong. Di bawah ini validasinya
+
+        if(blank($toolName) || blank($toolDescription) || blank($toolCategory)){ // ini kalo misal ada XSS menggunakan payload-nya di dalam tag HTML, kayak <img src=alert('XSS'), 
+            return redirect()->route('dashboardAdmin')->with('status', 'Invalid data');
+        }
         //cek apakah udh ada tool dengan nama yg sama
         $existingTool = Tool::where('name', $toolName)->first();
 
         if($existingTool){ //buat cek tool udh ada ato blm
             return redirect()->route('dashboardAdmin')->with('status', 'udah ada ngab, lupa ya awokwokow');
         }
-            
+        
         $tool = new Tool();
         $tool->name = $toolName;
         $tool->description = $toolDescription;
@@ -114,6 +121,13 @@ class AdminController extends Controller
         $stripedName = strip_tags($request->tool_name);
         $stripedDescription = strip_tags($request->description);
         $stripedCategory = strip_tags($request->category);
+
+        // ini kalo misal ada XSS menggunakan payload-nya di dalam tag HTML, kayak <img src=alert('XSS'), dari strip tags sebelumnya
+        // akan menghasilkan data yang kosong, jadi nanti yang di-save di database itu kosong. Maka dari itu harus ada validasi biar nanti
+        // yang masuk ke database ga kosong. Di bawah ini validasinya
+        if(blank($stripedName) || blank($stripedDescription) || blank($stripedCategory)){ // ini kalo misal ada XSS menggunakan payload-nya di dalam tag HTML, kayak <img src=alert('XSS'), 
+            return redirect()->route('dashboardAdmin')->with('status', 'Invalid data');
+        }
 
         $modifiedTool = Tool::find($request->tool_id);
         $modifiedTool->name = $stripedName;

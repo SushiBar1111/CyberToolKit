@@ -57,9 +57,13 @@ class BookmarkController extends Controller
             return redirect()->route('bookmarkPage')->with('status', 'harus integer')->setStatusCode(400);
         }
         $bookmark = Bookmark::find($request->bookmark_id);
+        $user = Auth::user();
 
-        if(!$bookmark){
-            return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab bookmarknya')->setStatusCode(400);
+        if(!$bookmark){ 
+            return redirect()->route('bookmarkPage')->with('status', 'nga ketemu ngab bookmarknya')->setStatusCode(404);
+        }
+        if($bookmark->user_id !== $user->id){ // coba mencegah user menghapus bookmark user lainnya dengan mengganti di
+            return redirect()->route('bookmarkPage')->with('status', 'Ga boleh delete bookmark user lain')->setStatusCode(401);
         }
         $bookmark->delete();
 

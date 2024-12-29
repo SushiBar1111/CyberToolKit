@@ -1,0 +1,137 @@
+/* Header styling */
+header {
+    width: 100%;
+    padding: 20px 40px;
+    background-color: #1A1A1A;
+    color: white;
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Left Section */
+.header-left h1 {
+    font-size: 2rem;
+    margin: 0;
+    margin-left: 35px;
+}
+
+/* Right Section */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-right: 40px;
+}
+
+/* Adjust individual spacing */
+.search-container {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+    justify-content: flex-start;
+    margin-right: 10px;
+}
+
+/* Search Icon */
+.search-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff30;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease, margin-left 0.3s ease;
+}
+
+.search-icon:hover {
+    background-color: white;
+    transform: scale(1.1);
+}
+
+.search-icon i {
+    color: white;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.search-bar {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    transform: scale(0.8);
+    transform-origin: left center;
+}
+
+.search-bar.active {
+    opacity: 1;
+    width: 250px;
+    transform: scale(1);
+    border-radius: 25px;
+}
+
+.search-bar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    color: #1A1A1A;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 10px;
+}
+
+/* Search Container Active Animation */
+.search-container.active .search-bar {
+    opacity: 1;
+    width: 300px;
+    transform: scale(1);
+    transition: all 0.4s ease;
+}
+
+.search-container.active .search-icon {
+    margin-left: -50px;
+}
+
+.search-container.active .search-icon i {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+/* batas css untuk search bar */
+
+
+/* CSS untuk profile icon*/
+.profile-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff30;
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+.profile-icon-container:hover {
+    background-color: white;
+    transform: scale(1.1);
+}
+
+.profile-icon i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* selese header */

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberToolkit</title>
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="{{ asset('css/forgotpassword.css') }}">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="header-left">
-            <a href="{{ url('/') }}"><h1>CyberToolKit</h1></a>
+            <a href="{{ route('dashboardView') }}"><h1>CyberToolKit</h1></a>
         </div>
         <div class="header-right">
             <div class="search-container">
@@ -34,19 +34,20 @@
         </div>
     </header>
     <main>
-        <section class="explore-section">
-            <h3>Discover the Ultimate Hacking Tools for Cybersecurity Professionals</h3>
-            <button class="explore-button" id="explore-button">Explore Tools</button>
-            <p>
-                CyberToolKit is your go-to resource for discovering essential hacking tools designed 
-                for cybersecurity professionals. We provide comprehensive descriptions of various tools, 
-                helping users understand their features and use cases. While we don't offer direct access 
-                to the tools, we aim to simplify your search by offering detailed information, enabling you 
-                to make informed decisions about the best tools to suit your cybersecurity needs.
-            </p>
+        <section class="profile-section">
+            <h3>Forgot Your Password?</h3>
+            <p>To reset your password, enter the email address you use to sign in to <b>CyberToolKit</b></p>
+            <form action="{{ route('login') }}" method="POST" class="forgot-password">
+                @csrf
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <button type="submit">Send reset link</button>
+                <p>Back to <a href="{{ route('login') }}" id="back-to-login-form">log in</a></p>
+            </form>
         </section>
     </main>
-
     <script src="{{ asset('js/searchicon.js') }}"></script>
     <script src="{{ asset('js/profileicon.js') }}"></script>
 </body>

@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('../assets/globe.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.header-left a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Main styling */
+.main-container {
+    margin-top: 10rem;
+    width: 90%;
+    max-width: 1000px;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2rem;
+    color: white;
+}
+
+.tools-list {
+    width: 55rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4rem;
+}
+
+.tools-list p {
+    font-weight: bold;
+    color: white;
+}
+
+.tool {
+    background-color: #212020;
+    border: 1px solid #3e3e3e;
+    border-radius: 10px;
+    padding: 20px;
+    width: 22rem;
+    height: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.tool:hover {
+    transform: scale(1.05);
+}
+
+.tool-logo {
+    width: 5rem;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.tool-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2980b9;
+}
+
+.tool-description {
+    font-size: 1rem;
+    color: #7f8c8d;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.bookmark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: #f39c12;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.bookmark:hover {
+    color: #f1c40f;
+}
+
+/* Explore Button */
+.explore-button {
+    background-color: white;
+    color: #1A1A1A;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 30px;
+    border: 2px solid #1A1A1A;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.explore-button:hover {
+    background-color: #1A1A1A;
+    color: white;
+}
+
+.explore-section p {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 125px;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 50px;  /* Jarak dari atas profile icon */
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Overlay container */
+.overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Rectangle di tengah overlay */
+.overlay-content {
+    background-color: #444444;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    opacity: 1000;
+}
+
+/* Tombol close overlay */
+.close-overlay {
+    position: absolute;
+    top: 1.2rem;
+    right: 3.2rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: rgb(189, 12, 12);
+    font-weight: bold;
+}
+
+.overlay-content h2{
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form label {
+    font-weight: bold;
+    text-align: left;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+form input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
+form button {
+    margin-top: 0.5rem;
+    padding: 10px;
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+form button:hover {
+    background-color: #333;
+}
+
+.bookmark-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.bookmark-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #f39c12; /* Warna bookmark */
+    font-size: 20px;
+}
+
+.bookmark-button:hover {
+    color: #e67e22; /* Warna hover */
+}
+
+.tool-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.tool-link:hover .tool {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease-in-out;
+}
+
+.more-text {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}

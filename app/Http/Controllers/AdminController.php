@@ -33,10 +33,16 @@ class AdminController extends Controller
             'tool_name' => 'required|string',
             'description' =>'required|string',
             'category' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        if($validation->fails()){
-            return redirect()->route('dashboardAdmin')->withErrors('status','Kureng neh datanya');
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('tools_photos', 'public');
+        }
+
+        if ($validation->fails()) {
+            return redirect()->route('dashboardAdmin')->withErrors($validation->errors());
         }
         $toolName = strip_tags($request->input('tool_name'));
         $toolDescription = strip_tags($request->input('description'));
@@ -59,7 +65,8 @@ class AdminController extends Controller
         $tool = new Tool();
         $tool->name = $toolName;
         $tool->description = $toolDescription;
-        $toolCategory = $toolCategory;
+        $tool->category = $toolCategory;
+        $tool->photo = $photoPath;
         $tool->save();
 
         return redirect()->route('dashboardAdmin')->with('status', 'berhasil ditambah ngab');

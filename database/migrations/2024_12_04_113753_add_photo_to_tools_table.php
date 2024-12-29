@@ -9,15 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('tools', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->enum('category', ['red_team', 'blue_team']);
+        Schema::table('tools', function (Blueprint $table) {
             $table->string('photo')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tools');
+        Schema::table('tools', function (Blueprint $table) {
+            $table->dropColumn('photo'); 
+        });
     }
 };

@@ -18,7 +18,7 @@
         <a href="{{ route('listUsers') }}" class="btn btn-info mb-3">Lihat Daftar User</a>
 
         <!-- Form untuk menambah tool -->
-        <form action="{{ route('addTool') }}" method="POST">
+        <form action="{{ route('addTool') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="tool_name">Nama Tool</label>
@@ -34,6 +34,10 @@
                     <option value="red_team">Red Team</option>
                     <option value="blue_team">Blue Team</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="photo">Foto Tool</label>
+                <input type="file" name="photo" class="form-control" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary mt-3">Tambah Tool</button>
         </form>

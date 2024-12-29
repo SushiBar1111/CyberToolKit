@@ -18,6 +18,10 @@ class AuthController extends Controller
         return view('login');
     }
 
+    function forgotpassword(Request $request){
+        return view('forgotpassword');
+    }
+
     // function buat register
     function userRegister(Request $request){
         // validasi input dulu

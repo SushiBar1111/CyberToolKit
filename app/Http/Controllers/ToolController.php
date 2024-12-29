@@ -11,11 +11,23 @@ class ToolController extends Controller
 {
     //buat ngambil dashboard view
     function DashboardView(){
-        return view('dashboard');
+        return view('dashboardafter');
     }
     //fungsi buat ngambil tool view bedeuhhh
-    function ToolView(){
-        return view('Tool');
+    function ToolView(Request $request){
+        $tool = Tool::find($request->id);
+
+        if (!$tool) {
+            return redirect()->route('dashboardView')->with('status', 'Tool not found');
+        }
+
+        $tool->description = preg_replace(
+            '/(https?:\/\/[^\s]+)/', 
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+            e($tool->description)
+        );
+    
+        return view('Tool', ['tool' => $tool]);
     }
     
     //fungsi buat ngambil tool yg dicari
@@ -33,7 +45,12 @@ class ToolController extends Controller
         if(!$tools){ // kalo ga ada ngab
             return redirect()->route('dashboardView')->with('status','ga ada tool nya, maaf yah');
         }else{
-            return view('dashboard', ['tools'=>$tools])->with('stasus', 'ada nih yey!');
+            return view('searchTool', ['tools'=>$tools])->with('stasus', 'ada nih yey!');
         }
+    }
+
+    function exploreTool(Request $request){
+        $tools = Tool::all(); 
+        return view('exploreTool', ['tools' => $tools]);
     }
 }

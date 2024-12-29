@@ -38,13 +38,13 @@ class BookmarkController extends Controller
         $existingBookmark = Bookmark::where('user_id', $user->id)->where('tool_id', $request->tool_id)->first();
 
         if($existingBookmark){
-            return redirect()->route('dashboardView')->with('status', 'Tool already bookmarked')->setStatusCode(400);
+            return redirect()->back()->with('status', 'Tool already bookmarked!')->setStatusCode(400);
         }
         $bookmark = new Bookmark();
         $bookmark->tool_id = $request->tool_id;
         $bookmark->user_id = $user->id;
         $bookmark->save();
-        return redirect()->route('dashboardView')->with('status', 'Tool bookmarked successfully!')->setStatusCode(200);
+        return redirect()->back()->with('status', 'Tool bookmarked successfully!')->setStatusCode(200);
     }
 
     function deleteBookmark(Request $request){
